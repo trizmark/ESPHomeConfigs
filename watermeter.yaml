@@ -1,0 +1,60 @@
+esphome:
+  name: "watermeter"
+  comment: "Water meter"
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+  level: DEBUG
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "Floo Network"
+  password: "thisisthekey!"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Watermeter Fallback Hotspot"
+    password: "RtoCTxriaP0y"
+
+#mqtt:
+#  broker: 192.168.0.200
+#  username: mqttuser
+#  password: mqttpass
+
+captive_portal:
+
+sensor:
+  - platform: pulse_counter
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+    name: "Water flow"
+    unit_of_measurement: "L"
+    device_class: "water"
+    state_class: ""
+    icon: "mdi:water"
+    update_interval: 60s
+    use_pcnt: false
+    internal_filter: 200ms
+    count_mode:
+      rising_edge: DISABLE
+      falling_edge: INCREMENT
+    filters:
+      - multiply: 6
+    total:
+      name: "Water usage total"
+      unit_of_measurement: "m³"
+      device_class: "water"
+      icon: "mdi:water-pump"
+      accuracy_decimals: 3
+      filters:
+        - multiply: 0.01

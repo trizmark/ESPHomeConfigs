@@ -1,0 +1,54 @@
+esphome:
+  name: gasmeter
+  comment: "Gas Meter"
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "Floo Network"
+  password: "thisisthekey!"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Gasmeter Fallback Hotspot"
+    password: "r5z6XcIny981"
+
+captive_portal:
+    
+sensor:
+  - platform: pulse_counter
+    pin:
+      number: D2
+      mode: INPUT_PULLUP
+    name: "Gas flow"
+    unit_of_measurement: "m³"
+    device_class: "gas"
+    state_class: ""
+    icon: "mdi:fire"
+    update_interval: 45s
+    use_pcnt: false
+    internal_filter: 200ms
+    count_mode:
+      rising_edge: DISABLE
+      falling_edge: INCREMENT
+    filters:
+      - multiply: 0.6
+    total:
+      name: "Gas usage total"
+      unit_of_measurement: "m³"
+      icon: "mdi:fire"
+      device_class: "gas"
+      accuracy_decimals: 3
+      filters:
+        - multiply: 0.01
