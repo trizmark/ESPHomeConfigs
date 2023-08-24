@@ -1,0 +1,40 @@
+esphome:
+  name: neonlight-1
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "Floo Network"
+  password: "thisisthekey!"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Neonlight-1 Fallback Hotspot"
+    password: "kkTsqt6vhwoR"
+
+captive_portal:
+
+output:
+  - platform: esp8266_pwm
+    id: onboard_led
+    pin:
+      number: 2
+      inverted: false
+
+light:
+ - platform: monochromatic
+   name: "Neonlight"
+   output: onboard_led
+   id: led
+   default_transition_length: 500ms
