@@ -1,10 +1,11 @@
 esphome:
-  name: solismanager
+  name: "solismanager"
+  comment: "Solis inverter monitor"
 
 esp8266:
   board: d1_mini
 
-# Enable logging
+# Diseble logging as we use the serial port for RS485
 logger:
   baud_rate: 0
   level: NONE
@@ -17,20 +18,20 @@ ota:
   password: ""
 
 wifi:
-  ssid: "Floo Network"
-  password: "thisisthekey!"
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwords
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Solismanager Fallback Hotspot"
-    password: "thisisthekey!"
+    password: !secret fallback_ap_password
 
 captive_portal:
 
 mqtt:
-  broker: 192.168.0.200
-  username: solis_esphome
-  password: solis_esphome
+  broker: 192.168.0.201
+  username: esphome_solis
+  password: esphome_solis
   topic_prefix: esphome_solis
     
 uart:
