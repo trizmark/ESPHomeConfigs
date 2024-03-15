@@ -41,7 +41,7 @@ sensor:
     name: "Water flow"
     unit_of_measurement: "L"
     device_class: "water"
-    state_class: ""
+    state_class: "measurement"
     icon: "mdi:water"
     update_interval: 60s
     use_pcnt: false
