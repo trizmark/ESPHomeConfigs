@@ -1,0 +1,91 @@
+esphome:
+  name: garagedoor
+  friendly_name: "Garage door"
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  - platform: esphome
+    password: ""
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Garagedoor Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+captive_portal:
+    
+# Example configuration entry for ESP32
+i2c:
+  sda: GPIO4
+  scl: GPIO5
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: ultrasonic
+    trigger_pin: GPIO13 # MOSI D7
+    echo_pin: GPIO15 # CS D8
+    name: "Door distance"
+    update_interval: 10s
+    timeout: 3.0m
+    id: door_distance
+  - platform: bmp280_i2c
+    temperature:
+      name: "Garage Temperature (BMP)"
+      oversampling: 16x
+    pressure:
+      name: "Garage Pressure"
+    address: 0x77
+    update_interval: 60s
+  - platform: aht10
+    variant: AHT20
+    temperature:
+      name: "Garage Temperature (AHT)"
+    humidity:
+      name: "Grarage Humidity"
+    update_interval: 60s
+
+output:
+  - platform: gpio
+    pin: GPIO14 # D0 - temp rename from 16
+    id: gpio_d14
+    inverted: true
+
+button:
+  - platform: output
+    name: "Garage door button"
+    output: gpio_d14
+    duration: 1000ms
+    id: garage_door_button
+
+# Example configuration entry
+cover:
+  - platform: template
+    name: None
+    device_class: garage
+    lambda: |-
+      if (id(door_distance).state < 0.1) {
+        return COVER_OPEN;
+      } else {
+        return COVER_CLOSED;
+      }
+    open_action:
+      - button.press: garage_door_button
+    close_action:
+      - button.press: garage_door_button
+    stop_action:
+      - button.press: garage_door_button
+    optimistic: true
