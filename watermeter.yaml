@@ -25,12 +25,6 @@ wifi:
     ssid: "Watermeter Fallback Hotspot"
     password: !secret fallback_ap_password
 
-mqtt:
-  broker: 192.168.0.201
-  username: esphome_watermeter
-  password: esphome_watermeter
-  topic_prefix: esphome_watermeter
-
 captive_portal:
 
 sensor:
